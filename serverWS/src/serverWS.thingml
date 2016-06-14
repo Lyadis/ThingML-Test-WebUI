@@ -1,0 +1,89 @@
+datatype String<2>
+	@type_checker "String"
+
+protocol WS @serializer "JSON"
+		@url "ws://localhost:44442"
+		@localserver "44442"
+
+configuration ServerWS {
+	instance s : TestServer
+
+	connector s.p over WS
+}
+
+thing fragment Msgs {
+	message feedback(s: String)
+	message gitPull()
+	message runTests()
+	message done()
+}
+
+thing TestServer includes Msgs {
+	required port p {
+		sends feedback
+		receives gitPull, runTests
+	}
+
+	internal port res {
+		sends done
+		receives done
+	}
+
+	function execCmd(s : String) do
+		'
+			var spawn = require("child_process").spawn;
+			var child = spawn('&s&', []);
+			//var child = spawn('&s&', ["-c", "20", "127.0.0.1"]);
+
+			child.stdout.on("data", function(chunk) {
+				'
+				p!feedback('chunk.toString()')
+				'
+			});
+
+			child.stderr.on("data", function(chunk) {
+				'
+				p!feedback('chunk.toString()')
+				'
+			});
+
+			child.on("close", function(chunk) {
+				'
+				res!done()
+				'
+			});
+		'
+	end
+
+	statechart Chart init Idle {
+		on entry print "[Server] Start\n"
+
+		state Idle {
+		
+			transition -> Busy 
+			event e : p?gitPull 
+			action execCmd("/thingml/ThingML/git_pull.sh")
+			//action execCmd("ping")
+		
+			transition -> Busy 
+			event e : p?runTests 
+			action execCmd("/thingml/ThingML/run_tests.sh")
+		}
+
+		state Busy {
+			transition -> Idle 
+			event e : res?done
+			action p!feedback("Done")
+
+			internal
+			event e : p?gitPull
+			action p!feedback("Server Busy")
+
+			internal
+			event e : p?runTests
+			action p!feedback("Server Busy")
+		}
+	}
+}
+
+

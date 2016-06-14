@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="js">
+<html>
 <head>
 	<title>ThingML Cloud Test UI</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,10 +7,8 @@
 	<link rel="stylesheet" href="http://www.w3schools.com/lib/w3-theme-black.css">
 	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
 
-	<link rel="stylesheet" type="text/css" href="css/component.css" />
-	<script src="js/custom-file-input.js"></script>
 
-	<script>(function(e,t,n){var r=e.querySelectorAll("html")[0];r.className=r.className.replace(/(^|\s)no-js(\s|$)/,"$1js$2")})(document,window,0);</script>
+
 </head>
 
 <body>
@@ -43,9 +41,13 @@
 	
 
 	<div class="w3-container w3-card-4">
-			<hr>
-
-			<hr>
+		<hr>
+			<h3>Feedback</h3>
+		<hr>
+			<input id="gitPull" type="button" value="gitPull" onclick="gitPull()"  class="submit-button"/>
+			<input id="runTests" type="button" value="runTests" onclick="runTests()"  class="submit-button"/>
+			<div name="cmd-results" id="cmd-results"></div>
+		<hr>
 	</div>
 </div>
 
@@ -53,7 +55,65 @@
 
 
 
+<script>
+
+
+var logs = document.getElementById('cmd-results');
+
+var socket;
+
+function wsConnect() {
+	var protocol = 'ThingML';
+	var addr = '192.168.1.6';
+	var port = '9000';
+
+	if (typeof MozWebSocket != "undefined") {
+		socket = new MozWebSocket("ws://" + addr + ":" + port + "/xxx",
+				   protocol);
+	} else {
+		socket = new WebSocket("ws://" + addr + ":" + port + "/xxx",
+				   protocol);
+	}
+
+	try {
+		socket.onopen = function() {
+			logs.innerHTML = '<br /\>' + "> Websocket connection opened ";
+		} 
+
+		socket.onmessage =function got_packet(msg) {
+			//document.getElementById("lastmsg").textContent = msg.data + "\n";
+			parseWSmsg(JSON.parse(msg.data));
+		} 
+
+		socket.onclose = function(){
+			logs.innerHTML = '<br /\>' + "> Websocket connection CLOSED ";
+		}
+	} catch(exception) {
+		alert('<p>Error' + exception);  
+	}
+}
+
+function parseWSmsg(WSmsg) {
+	for(mID in WSmsg) {
+		if(mID == 'feedback') {
+			logs.innerHTML += '<br /\>' + WSmsg['feedback']['s'];
+			logs.scrollBottom;
+		}
+	}
+}
+
+function gitPull() {
+	socket.send('{"gitPull":{}}');
+}
+
+function runTests() {
+	socket.send('{"runTests":{}}');
+}
+document.ready(wsConnect());
+</script>
+
 
 </body>
+
 </html>
 
