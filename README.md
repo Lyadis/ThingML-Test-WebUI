@@ -6,6 +6,7 @@
  * Building (mvn)
  * Run org.thingml.testjar.loadBalancer.Main
  * Run dispatch.sh
+
 ##Host WebUI
 
 #Slave node
@@ -15,4 +16,7 @@
 ##Host test sources, logs, etc
 
 #Slave arduinode
+##Worker
  * same thing but must have access to serial port
+
+##Host test sources, logs, etc
