@@ -20,8 +20,7 @@
 
 	<ul class="w3-navbar w3-theme">
 	  <li><a class="w3-padding-16" href="config.php">Configuration</a></li>
-	  <li><a class="w3-dark-grey w3-padding-16" href="gitpull.php">Git Pull</a></li>
-	  <li><a class="w3-padding-16" href="runtests.php">Run Tests</a></li>
+	  <li><a class="w3-dark-grey w3-padding-16" href="gitpull.html">Commandes</a></li>
 	  <li><a class="w3-padding-16" href="results.html">Results</a></li>
 	</ul>
   </div>
@@ -65,7 +64,7 @@ var socket;
 function wsConnect() {
 	var protocol = 'ThingML';
 	var addr = '192.168.1.6';
-	var port = '9000';
+	var port = '44442';
 
 	if (typeof MozWebSocket != "undefined") {
 		socket = new MozWebSocket("ws://" + addr + ":" + port + "/xxx",

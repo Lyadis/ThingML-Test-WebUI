@@ -5,6 +5,15 @@ testjar_dir="$thingml_dir/testJar"
 log_dir="/thingml/web"
 log_file="$log_dir/git_pull_log"
 
+function filter {
+#	while read line
+#	do 
+#		printf "$line\n" | grep "ERROR"
+#		printf "$line\n" | grep "BUILD SUCCESS"
+#	done
+	grep 'ERROR\|BUILD SUCCESS'
+}
+
 echo "> Start"
 echo "> mv to thingml dir"
 cd $thingml_dir
@@ -15,8 +24,13 @@ git pull
 echo "> restore old config"
 mv $testjar_dir/old.properties $testjar_dir/config.properties
 echo "> mvn clean install"
-mvn clean install 2>> $log_file
+mvn clean install | grep 'ERROR\|BUILD SUCCESS'
+#Go to test dir
 cd $testjar_dir
+
 echo "> mvn clean install"
-mvn clean install 2>> $log_file
+mvn clean install | grep 'ERROR\|BUILD SUCCESS'
 echo "> DONE"
+
+
+
