@@ -27,17 +27,18 @@ cd $testjar_dir
 echo "> rm -r *_testDir"
 rm -r *_testDir
 
-echo "sed 's/languageList=.*/languageList=posix, posixmt, java, javascript/g' config.properties"
-sed 's/languageList=.*/languageList=posix, posixmt, java, javascript/g' config.properties
+echo "sed 's/languageList=.*/languageList=arduino/g' config.properties"
+sed 's/languageList=.*/languageList=arduino/g' config.properties
 
-echo "> cp classicBalancer.properties loadBalancer.properties"
-cp classicBalancer.properties loadBalancer.properties
+echo "> cp arduinoBalancer.properties loadBalancer.properties"
+cp arduinoBalancer.properties loadBalancer.properties
 
 echo "> java -cp .:target/testJar-0.7.0-SNAPSHOT-jar-with-dependencies.jar org.thingml.loadbalancer.LoadBalancer"
 java -cp .:target/testJar-0.7.0-SNAPSHOT-jar-with-dependencies.jar org.thingml.loadbalancer.LoadBalancer
 
 echo "> ./dispatch.sh"
 ./dispatch.sh
+
 
 echo "> DONE"
 
