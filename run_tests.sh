@@ -27,8 +27,8 @@ cd $testjar_dir
 echo "> rm -r *_testDir"
 rm -r *_testDir
 
-echo "sed -i 's/languageList=.*/languageList=posix, posixmt, java, javascript/g' config.properties"
-sed -i 's/languageList=.*/languageList=posix, posixmt, java, javascript/g' config.properties
+echo "sed -i 's/languageList=.*/languageList=posix, posixmt, java, nodejs/g' config.properties"
+sed -i 's/languageList=.*/languageList=posix, posixmt, java, nodejs/g' config.properties
 
 echo "> cp classicBalancer.properties loadBalancer.properties"
 cp classicBalancer.properties loadBalancer.properties
