@@ -27,8 +27,8 @@ cd $testjar_dir
 echo "> rm -r *_testDir"
 rm -r *_testDir
 
-echo "sed 's/languageList=.*/languageList=arduino/g' config.properties"
-sed 's/languageList=.*/languageList=arduino/g' config.properties
+echo "sed -i 's/languageList=.*/languageList=arduino/g' config.properties"
+sed -i 's/languageList=.*/languageList=arduino/g' config.properties
 
 echo "> cp arduinoBalancer.properties loadBalancer.properties"
 cp arduinoBalancer.properties loadBalancer.properties
