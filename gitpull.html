@@ -41,10 +41,12 @@
 
 	<div class="w3-container w3-card-4">
 		<hr>
+			<input id="gitPull" type="button" value="git pull" onclick="gitPull()"  class="submit-button"/>
+			<input id="runTests" type="button" value="run tests" onclick="runTests()"  class="submit-button"/>
+			<input id="runArduinoTests" type="button" value="run arduino tests" onclick="runArduinoTests()"  class="submit-button"/>
+		<hr>
 			<h3>Feedback</h3>
 		<hr>
-			<input id="gitPull" type="button" value="gitPull" onclick="gitPull()"  class="submit-button"/>
-			<input id="runTests" type="button" value="runTests" onclick="runTests()"  class="submit-button"/>
 			<div name="cmd-results" id="cmd-results"></div>
 		<hr>
 	</div>
@@ -95,7 +97,7 @@ function wsConnect() {
 function parseWSmsg(WSmsg) {
 	for(mID in WSmsg) {
 		if(mID == 'feedback') {
-			logs.innerHTML += '<br /\>' + WSmsg['feedback']['s'];
+			logs.innerHTML += '<br /\>' + WSmsg['feedback']['s'].replace(/\n/g, "<br />");;
 			logs.scrollBottom;
 		}
 	}
@@ -107,6 +109,10 @@ function gitPull() {
 
 function runTests() {
 	socket.send('{"runTests":{}}');
+}
+
+function runArduinoTests() {
+	socket.send('{"runArduinoTests":{}}');
 }
 document.ready(wsConnect());
 </script>

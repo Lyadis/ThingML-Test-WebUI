@@ -15,13 +15,14 @@ thing fragment Msgs {
 	message feedback(s: String)
 	message gitPull()
 	message runTests()
+	message runArduinoTests()
 	message done()
 }
 
 thing TestServer includes Msgs {
 	required port p {
 		sends feedback
-		receives gitPull, runTests
+		receives gitPull, runTests, runArduinoTests
 	}
 
 	internal port res {
@@ -68,6 +69,10 @@ thing TestServer includes Msgs {
 			transition -> Busy 
 			event e : p?runTests 
 			action execCmd("/thingml/ThingML/run_tests.sh")
+		
+			transition -> Busy 
+			event e : p?runArduinoTests 
+			action execCmd("/thingml/ThingML/arduino_run_tests.sh")
 		}
 
 		state Busy {
@@ -81,6 +86,10 @@ thing TestServer includes Msgs {
 
 			internal
 			event e : p?runTests
+			action p!feedback("Server Busy")
+
+			internal
+			event e : p?runArduinoTests
 			action p!feedback("Server Busy")
 		}
 	}

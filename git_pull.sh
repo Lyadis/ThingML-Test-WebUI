@@ -5,14 +5,14 @@ testjar_dir="$thingml_dir/testJar"
 log_dir="/thingml/web"
 log_file="$log_dir/git_pull_log"
 
-function filter {
+#function filter {
 #	while read line
 #	do 
 #		printf "$line\n" | grep "ERROR"
 #		printf "$line\n" | grep "BUILD SUCCESS"
 #	done
-	grep 'ERROR\|BUILD SUCCESS'
-}
+#	grep 'ERROR\|BUILD SUCCESS'
+#}
 
 echo "> Start"
 echo "> mv to thingml dir"
